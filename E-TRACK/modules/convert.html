@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #76c7c0, #c4dfe6);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+            display: block;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        button {
+            background-color: #76c7c0;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background-color: #52b0a9;
+        }
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .full-width {
+            grid-column: span 2;
+        }
+        .result {
+            text-align: center;
+            font-size: 1.5em;
+            color: #333;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .back-btn {
+            background-color: #f44336;
+            font-size: 1.1em;
+        }
+        .back-btn:hover {
+            background-color: #d7352b;
+        }
+        @media (max-width: 600px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+            button {
+                font-size: 1em;
+            }
+        }
+        .conversion-records {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Currency Converter</h2>
+        <form id="convertForm" class="grid-layout">
+            <div>
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" name="amount" placeholder="Enter amount" required>
+            </div>
+
+            <div>
+                <label for="fromCurrency">From</label>
+                <select id="fromCurrency" name="fromCurrency" required>
+                    <option value="USD">USD - US Dollar</option>
+                    <option value="EUR">EUR - Euro</option>
+                    <option value="INR">INR - Indian Rupee</option>
+                    <option value="GBP">GBP - British Pound</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="toCurrency">To</label>
+                <select id="toCurrency" name="toCurrency" required>
+                    <option value="INR">INR - Indian Rupee</option>
+                    <option value="USD">USD - US Dollar</option>
+                    <option value="EUR">EUR - Euro</option>
+                    <option value="GBP">GBP - British Pound</option>
+                </select>
+            </div>
+
+            <div class="full-width">
+                <button type="submit">Convert</button>
+            </div>
+
+            <div class="full-width">
+                <button type="button" class="back-btn" onclick="window.location.href='home.html'">Back to Home</button>
+            </div>
+        </form>
+
+        <div id="result" class="result"></div>
+        
+        <!-- Displaying conversion records -->
+        <div class="conversion-records">
+            <h3>Recent Conversions</h3>
+            <ul id="conversionRecordsList">
+                <!-- Recent conversion records will be dynamically inserted here -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Predefined conversion rates for demonstration purposes
+        const conversionRates = {
+            'USD_INR': 74.50,
+            'EUR_INR': 87.00,
+            'GBP_INR': 101.00,
+            'INR_USD': 0.013,
+            'EUR_USD': 1.18,
+            'GBP_USD': 1.38,
+            'USD_EUR': 0.85,
+            'INR_EUR': 0.011,
+            'USD_GBP': 0.73,
+            'INR_GBP': 0.0099,
+            'EUR_GBP': 0.85
+        };
+
+        // Handle form submission
+        document.getElementById('convertForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const amount = document.getElementById('amount').value;
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+
+            if (amount && fromCurrency && toCurrency) {
+                // Calculate conversion
+                const conversionKey = `${fromCurrency}_${toCurrency}`;
+                const conversionRate = conversionRates[conversionKey];
+                const convertedAmount = amount * conversionRate;
+
+                // Display the converted amount
+                document.getElementById('result').innerText = `Converted Amount: ${convertedAmount.toFixed(2)} ${toCurrency}`;
+
+                // Prepare the conversion record for display
+                const recordDescription = `Converted ${amount} ${fromCurrency} to ${convertedAmount.toFixed(2)} ${toCurrency}`;
+
+                // Add the new conversion record dynamically to the page
+                const conversionList = document.getElementById('conversionRecordsList');
+                const listItem = document.createElement('li');
+                listItem.innerText = recordDescription;
+                conversionList.insertBefore(listItem, conversionList.firstChild);
+
+                // Store conversion record in localStorage (optional for persistence)
+                let records = JSON.parse(localStorage.getItem('conversionRecords')) || [];
+                records.push({ amount, fromCurrency, toCurrency, convertedAmount: convertedAmount.toFixed(2), description: recordDescription });
+                localStorage.setItem('conversionRecords', JSON.stringify(records));
+            }
+        });
+
+        // Load previous conversion records from localStorage
+        window.onload = function() {
+            const records = JSON.parse(localStorage.getItem('conversionRecords')) || [];
+            const conversionList = document.getElementById('conversionRecordsList');
+
+            records.forEach(record => {
+                const listItem = document.createElement('li');
+                listItem.innerText = record.description;
+                conversionList.appendChild(listItem);
+            });
+        };
+    </script>
+
+</body>
+</html>
