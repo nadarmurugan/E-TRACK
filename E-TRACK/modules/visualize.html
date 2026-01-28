@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<style>
+    /* General Styles */
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #72c2e5, #4b8f7f);
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Navbar */
+    .navbar {
+        background-color: #3a4a6e;
+        padding: 12px 0;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        position: fixed;
+        top: 0;
+        z-index: 10;
+    }
+
+    .navbar a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 12px 18px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        border-radius: 8px;
+    }
+
+    .navbar a:hover {
+        background-color: #536dfe;
+        transform: scale(1.1);
+    }
+
+    /* Main Content Container */
+    .container {
+        max-width: 1200px;
+        margin: 120px auto;
+        padding: 40px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        text-align: center;
+    }
+
+    .container h1 {
+        font-size: 3rem;
+        margin-bottom: 30px;
+        color: #ffd700;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Dropdown */
+    .dropdown {
+        margin-bottom: 30px;
+    }
+
+    .dropdown label {
+        font-size: 1.2rem;
+        margin-right: 12px;
+        font-weight: 500;
+    }
+
+    .dropdown select {
+        padding: 12px;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        color: #333;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+    .dropdown select:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Canvas */
+    #summaryChart {
+        max-width: 100%;
+        margin-bottom: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Buttons */
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 20px;
+    }
+
+    .button, #backButton {
+        padding: 12px 20px;
+        font-size: 1.1rem;
+        background-color: #536dfe;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .button:hover, #backButton:hover {
+        background-color: #3a56d0;
+        transform: scale(1.05);
+    }
+
+    .back-btn {
+        background-color: #ff6b6b;
+    }
+
+    .back-btn:hover {
+        background-color: #ff4d4d;
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+        .container {
+            padding: 30px;
+        }
+
+        .navbar {
+            flex-direction: column;
+            padding: 15px;
+        }
+
+        .navbar a {
+            padding: 15px;
+            font-size: 1.1rem;
+        }
+
+        .buttons {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+</style>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="home.html">Home</a>
+        <a href="profile.html">Profile Settings</a>
+        <a href="convert.html">Convert Currency</a>
+        <a href="feedback.html">Feedback & Suggestions</a>
+        <a href="visualize.html">Data Visualization</a>
+    </div>
+
+    <!-- Container for Main Content -->
+    <div class="container">
+        <h1>Data Visualization</h1>
+
+        <!-- Dropdown for Chart Type Selection -->
+        <div class="dropdown">
+            <label for="chartType">Select Chart Type:</label>
+            <select id="chartType">
+                <option value="bar">Bar Chart</option>
+                <option value="line">Line Chart</option>
+                <option value="pie">Pie Chart</option>
+            </select>
+        </div>
+
+        <!-- Canvas for Chart -->
+        <canvas id="summaryChart" width="400" height="200"></canvas>
+
+        <!-- Buttons -->
+        <div class="buttons">
+            <button id="downloadChart" class="button">Download Chart</button>
+            <a href="home.html" id="backButton" class="button back-btn">Back to Home</a>
+        </div>
+    </div>
+
+    <script src="visualize.js"></script>
+</body>
+</html>

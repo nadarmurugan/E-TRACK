@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Calculator</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<style>
+    /* ===============================
+   General Body Styling
+================================= */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #f3ec78, #af4261);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* ===============================
+   Navigation Bar Styling
+================================= */
+.navbar {
+    background-color: #2c3e50;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a {
+    color: #f2f2f2;
+    text-decoration: none;
+    padding: 14px 16px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.navbar a:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+#logoutButton {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#logoutButton:hover {
+    background-color: #c0392b;
+}
+
+#logoutButton:active {
+    transform: scale(0.98);
+}
+
+/* ===============================
+   Main Container Styling
+================================= */
+.container {
+    margin-top: 80px; /* space for fixed navbar */
+    background: #ffffff;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+    padding: 2em;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 700px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+}
+
+/* ===============================
+   Form & Box Styling
+================================= */
+.form-box, .history-box {
+    background: #ffffff;
+    padding: 2em;
+    border-radius: 15px;
+    margin-bottom: 2em;
+    width: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input, select, button {
+    padding: 1em;
+    margin-bottom: 1.2em;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    width: 100%;
+    font-size: 16px;
+}
+
+input, select {
+    background-color: #f8f8f8;
+}
+
+button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.error-message {
+    color: #e74c3c;
+}
+
+/* ===============================
+   Summary Box Styling
+================================= */
+.summary-box {
+    background-color: #ffffff;
+    color: #333;
+    padding: 2em;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+    margin: 3em auto;
+}
+
+.summary-box h2 {
+    text-align: center;
+    margin-bottom: 1em;
+    font-size: 1.8em;
+    color: #2c3e50;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5em;
+    margin-bottom: 1.5em;
+    border-radius: 10px;
+    font-size: 1.4em;
+    font-weight: bold;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Individual summary item colors */
+#incomeTotal {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+#expenseTotal {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+#remainingAmount {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+/* ===============================
+   History Table Styling
+================================= */
+.history-box table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-box th, .history-box td {
+    padding: 1em;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.history-box th {
+    background-color: #3498db;
+    color: white;
+}
+
+.history-box tr:nth-child(even) {
+    background-color: #f1f1f1;
+}
+
+.history-box tr:hover {
+    background-color: #ecf0f1;
+}
+
+.history-box button {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.history-box button:hover {
+    background-color: #2ecc71;
+}
+
+</style>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="home.html"><i class="fas fa-home"></i> Home</a>
+        <a href="profile.html"><i class="fas fa-user-cog"></i> Profile Settings</a>
+        <a href="convert.html"><i class="fas fa-exchange-alt"></i> Convert Currency</a>
+        <a href="feedback.html"><i class="fas fa-comment-dots"></i> Feedback & Suggestions</a>
+        <a href="visualize.html"><i class="fas fa-chart-bar"></i> Data Visualization</a>
+        <button class="btn-grad" id="logoutButton" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+
+    <script>
+        function logout() {
+            // Display a confirmation alert
+            if (confirm("Are you sure you want to logout?")) {
+                // Clear user session data (if applicable)
+                localStorage.removeItem('userToken'); // Example for token storage
+                // Redirect to the login page
+                window.location.href = 'index.html'; // Correct path to your login page
+            }
+        }
+    </script>
+
+    <!-- Container for Main Content -->
+    <div class="container">
+        <!-- Form Box for Adding Transactions -->
+        <div class="form-box">
+            <h1><i class="fas fa-calculator"></i> Expense Calculator</h1>
+            <form id="transactionForm">
+                <input type="text" id="description" name="description" placeholder="Description" required>
+                <input type="number" id="amount" name="amount" placeholder="Amount" step="0.01" required min="0">
+                <select id="type" name="type" required>
+                    <option value="" disabled selected>Type</option>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+                <button type="submit"><i class="fas fa-plus-circle"></i> Add Transaction</button>
+                <p id="form-error" class="error-message"></p>
+            </form>
+        </div>
+
+        <!-- Summary Box for displaying Income, Expenses, and Remaining Amount -->
+        <div class="summary-box">
+            <h2><i class="fas fa-info-circle"></i> Summary</h2>
+            <div class="summary-item" id="incomeTotal">
+                <span><i class="fas fa-dollar-sign"></i> Income:</span> <span>₹0.00</span>
+            </div>
+            <div class="summary-item" id="expenseTotal">
+                <span><i class="fas fa-money-bill-wave"></i> Expenses:</span> <span>₹0.00</span>
+            </div>
+            <div class="summary-item" id="remainingAmount">
+                <span><i class="fas fa-wallet"></i> Remaining:</span> <span>₹0.00</span>
+            </div>
+        </div>
+
+        <!-- History Box for displaying Transactions -->
+        <div class="history-box">
+            <h2><i class="fas fa-history"></i> Transaction History</h2>
+            <table id="transactionTable">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Type</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Transactions will be displayed here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="home.js"></script>
+    <script src="logout.js"></script>
+</body>
+</html>
